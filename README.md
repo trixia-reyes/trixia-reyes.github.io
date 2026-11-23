@@ -40,22 +40,15 @@ for p in "academic:Trixia_Reyes_Academic_CV" "ld-hr:Trixia_Reyes_LD_HR_Resume"; 
 done
 ```
 
-Each page is fixed at A4. If text is added and the page overflows, the bottom gets cut off, so check the PDF after every edit.
-
-## Deploying to GitHub Pages
-
-This folder sits inside a larger repository, so give it its own repo first:
+Both resumes are written for applicant tracking systems (ATS): single column, real text (no text in images), standard section headings, no tables, and no headers or footers (an ATS reads those before the name). The Academic CV is 3 pages; the L&D/HR resume must stay at 1 page. After editing, check the page count:
 
 ```bash
-cd Trixia_site
-git init -b main
-git add .
-git commit -m "Portfolio site"
-gh repo create <account>/<repo-name> --public --source=. --push
-gh api -X POST repos/<account>/<repo-name>/pages -f "source[branch]=main" -f "source[path]=/"
+python3 -c "from pypdf import PdfReader as R; [print(f, len(R(f).pages)) for f in ['assets/docs/Trixia_Reyes_Academic_CV.pdf','assets/docs/Trixia_Reyes_LD_HR_Resume.pdf']]"
 ```
 
-The site goes live at `https://<account>.github.io/<repo-name>/` within a minute or two. If the repo is named `<account>.github.io`, the site is served from the root URL instead. A custom domain can be added later under the repo's Settings → Pages.
+## Hosting at trixia-reyes.github.io
+
+The site is served by the repository `trixia-reyes/trixia-reyes.github.io`, owned by the GitHub organization `trixia-reyes` (which `sur-akash` owns). Any push to `main` republishes it within a minute or two.
 
 ## Regional LinkedIn link
 

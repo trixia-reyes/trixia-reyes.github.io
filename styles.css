@@ -65,8 +65,14 @@ button { font: inherit; cursor: pointer; }
 }
 .intro__mark { display: flex; gap: .04em; font-family: var(--serif); font-weight: 700; font-size: clamp(64px, 12vw, 128px); color: var(--plum); line-height: 1; }
 .intro__letter { display: inline-block; opacity: 0; transform: translateY(40%); animation: letterIn .7s var(--ease) forwards; }
-.intro__letter:nth-child(2) { animation-delay: .12s; color: var(--violet); }
-.intro__letter:nth-child(3) { animation-delay: .24s; }
+/* T matches "Trixia" (upright 600), R matches "Reyes" (italic 400 + gradient) */
+.intro__letter--t { font-weight: 600; letter-spacing: -.03em; }
+.intro__letter--r {
+  font-style: italic; font-weight: 400; animation-delay: .16s;
+  background: linear-gradient(100deg, var(--violet) 10%, var(--violet-2) 50%, var(--plum) 90%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  padding: 0 .1em .12em .02em; margin: 0 -.06em -.12em -.02em;
+}
 .intro__sub {
   font-size: 12px; letter-spacing: .5em; text-transform: uppercase; color: var(--ink-soft);
   opacity: 0; animation: fadeIn .6s ease .5s forwards; padding-left: .5em;
@@ -94,8 +100,11 @@ button { font: inherit; cursor: pointer; }
 .nav__brand { display: flex; align-items: center; gap: 12px; text-decoration: none; margin-right: auto; }
 .nav__mono {
   display: inline-grid; place-items: center; width: 38px; height: 38px; border-radius: 11px;
-  background: var(--plum); color: #efe7ff; font-family: var(--serif); font-weight: 700; font-size: 15px; letter-spacing: .02em;
+  background: var(--plum); color: #efe7ff; font-family: var(--serif); font-weight: 600; font-size: 16px; letter-spacing: -.02em;
 }
+.nav__mono { display: inline-flex; align-items: center; justify-content: center; white-space: nowrap; }
+.nav__mono i { font-style: italic; font-weight: 400; color: var(--lilac); margin-left: .02em; }
+.footer .nav__mono i { color: var(--violet); }
 .nav__name { font-weight: 700; font-size: 15px; letter-spacing: .01em; }
 .nav__links { display: flex; gap: 26px; }
 .nav__links a {
@@ -204,8 +213,18 @@ button { font: inherit; cursor: pointer; }
   font-style: italic; font-weight: 400;
   background: linear-gradient(100deg, var(--violet) 10%, var(--violet-2) 50%, var(--plum) 90%);
   -webkit-background-clip: text; background-clip: text; color: transparent;
-  padding-right: .08em;
+  /* room for the italic overhang and the descender of "y", which background-clip would otherwise cut off */
+  width: fit-content; padding: 0 .14em .2em .06em; margin: 0 -.14em -.2em -.06em;
 }
+
+/* ---------- Mild purple tint for every photo ---------- */
+.tint, .ph button, .lb__frame { position: relative; display: block; }
+.tint::after, .ph button::after, .lb__frame::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: inherit;
+  background: linear-gradient(160deg, rgba(139,92,246,.55), rgba(59,31,107,.6));
+  mix-blend-mode: soft-light; opacity: .9;
+}
+.tint img, .ph img, .lb__frame img { filter: saturate(.88) contrast(1.03); }
 .hero__typed { font-size: clamp(20px, 2.3vw, 26px); font-weight: 600; color: var(--ink); min-height: 1.6em; }
 .typed__static { color: var(--ink-soft); font-weight: 500; }
 .typed { color: var(--violet); }
@@ -369,8 +388,28 @@ a.pub__title::after { content: " ↗"; font-family: var(--sans); font-size: 14px
 .section__head--light .section__title::after { border-color: #fff; border-bottom-color: var(--lilac); }
 .section__head--light .section__intro { color: #ddd0fb; }
 .downloads { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; position: relative; }
+/* Resume avatars: academia = duotone circle with rotating text ring; corporate = full-colour tilted card stack */
+.avatar { position: relative; width: 150px; height: 150px; flex: none; }
+.avatar--academia .avatar__ring { position: absolute; inset: -14px; width: calc(100% + 28px); height: calc(100% + 28px); animation: spin 26s linear infinite; }
+.avatar__ring text { font: 800 11.5px var(--sans); letter-spacing: .26em; fill: var(--lilac); }
+.avatar--academia .avatar__img { position: absolute; inset: 12px; width: calc(100% - 24px); height: calc(100% - 24px); border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 3px rgba(255,255,255,.9); }
+.avatar__badge { position: absolute; right: 2px; bottom: 6px; width: 40px; height: 40px; border-radius: 50%; background: #fff; display: grid; place-items: center; box-shadow: 0 6px 16px rgba(0,0,0,.25); }
+.avatar__badge svg { width: 22px; height: 22px; fill: none; stroke: var(--plum); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.avatar--corporate .avatar__stack { position: absolute; inset: 10px 0 0 10px; border-radius: 22px; background: linear-gradient(135deg, var(--violet-2), var(--lilac)); transform: rotate(8deg); }
+.avatar--corporate .avatar__frame {
+  position: absolute; inset: 0 10px 10px 0; border-radius: 22px; overflow: hidden; transform: rotate(-4deg);
+  background: linear-gradient(180deg, #efe7ff, #cdb9f6); box-shadow: 0 0 0 3px #fff, 0 14px 30px rgba(0,0,0,.3);
+  transition: transform .4s var(--ease);
+}
+.avatar--corporate .avatar__img { width: 100%; height: 100%; object-fit: cover; mix-blend-mode: multiply; }
+.dl:hover .avatar--corporate .avatar__frame { transform: rotate(0deg); }
+.avatar__tag { position: absolute; left: -10px; bottom: 4px; background: #fff; color: var(--plum); font-family: var(--serif); font-weight: 600; font-size: 14px; padding: 4px 10px; border-radius: 8px; box-shadow: 0 6px 16px rgba(0,0,0,.25); transform: rotate(-4deg); }
+.dl__meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.dl__meta li { font-size: 12px; font-weight: 700; letter-spacing: .04em; padding: 4px 10px; border-radius: 999px; background: rgba(255,255,255,.12); color: #efe7ff; }
+
 .dl {
-  display: grid; grid-template-columns: auto 1fr; gap: 20px 22px; padding: 30px; border-radius: 20px;
+  display: grid; grid-template-columns: auto 1fr; gap: 20px 30px; padding: 32px; border-radius: 20px; align-items: center;
   background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18);
   backdrop-filter: blur(6px); transition: background .3s, transform .35s var(--ease);
 }
@@ -391,14 +430,50 @@ a.pub__title::after { content: " ↗"; font-family: var(--sans); font-size: 14px
 }
 .hobbies svg { width: 22px; height: 22px; fill: none; stroke: var(--lilac); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 
-.countries { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; margin-bottom: 40px; padding: 18px 22px; border-radius: var(--radius); background: var(--lavender); }
-.countries__home { font-weight: 700; color: var(--plum); padding-right: 18px; border-right: 1px solid var(--lilac); font-size: 15px; }
-.countries__home b { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--violet); margin-right: 8px; }
-.countries ul { display: flex; flex-wrap: wrap; gap: 8px 18px; }
-.countries li { font-size: 15px; font-weight: 600; color: var(--ink-soft); }
-.countries li::before { content: "✦"; color: var(--violet-2); margin-right: 6px; font-size: 11px; }
-
-.tabs--gallery { margin-bottom: 28px; }
+/* Passport stamps */
+.passport {
+  margin: 8px 0 48px; padding: 30px 30px 34px; border-radius: 22px; position: relative; overflow: hidden;
+  background:
+    repeating-linear-gradient(0deg, transparent 0 27px, rgba(109,63,208,.07) 27px 28px),
+    linear-gradient(135deg, #f6f1ff, #ece3fd);
+  border: 1px solid var(--line);
+}
+.passport::before { /* faint guilloche pattern like a passport page */
+  content: ""; position: absolute; right: -80px; top: -80px; width: 320px; height: 320px; border-radius: 50%; opacity: .5; pointer-events: none;
+  background: repeating-radial-gradient(circle, transparent 0 9px, rgba(139,92,246,.12) 9px 10px);
+}
+.passport__head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 24px; margin-bottom: 26px; position: relative; }
+.passport__label { font-size: 12px; font-weight: 800; letter-spacing: .28em; text-transform: uppercase; color: var(--violet); }
+.passport__count { font-family: var(--serif); font-size: 19px; color: var(--ink-soft); }
+.passport__count b { color: var(--plum); font-weight: 600; }
+.stamps { display: flex; flex-wrap: wrap; gap: 22px 26px; position: relative; }
+.stamp {
+  --ink: var(--violet); --r: 0deg;
+  width: 118px; height: 118px; display: grid; place-content: center; justify-items: center; text-align: center; gap: 2px;
+  color: var(--ink); border: 2.5px solid currentColor; outline: 1.5px dashed currentColor; outline-offset: -9px;
+  transform: rotate(var(--r)); opacity: .9; mix-blend-mode: multiply; position: relative;
+  transition: transform .4s var(--ease), opacity .3s;
+}
+.stamp:hover { transform: rotate(0deg) scale(1.06); opacity: 1; }
+.stamp--circle { border-radius: 50%; }
+.stamp--oval { border-radius: 50%; width: 150px; height: 104px; }
+.stamp--rect { border-radius: 10px; width: 132px; height: 100px; }
+.stamp--home { width: 150px; height: 118px; border-radius: 14px; background: var(--plum); color: #fff; border-color: var(--plum); outline-color: rgba(255,255,255,.45); mix-blend-mode: normal; opacity: 1; }
+.stamp--home .stamp__code { color: #fff; }
+.stamp--home .stamp__note { color: var(--lilac); }
+.stamp:nth-child(3n+2) { --ink: #7c4fd8; }
+.stamp:nth-child(3n) { --ink: #5b2fae; }
+.stamp__code { font-family: var(--serif); font-weight: 600; font-size: 34px; line-height: 1; letter-spacing: .02em; }
+.stamp__name { font-size: 11px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+.stamp__note { font-size: 9.5px; font-weight: 800; letter-spacing: .22em; text-transform: uppercase; opacity: .8; }
+/* "stamping" entrance when the passport scrolls into view */
+.passport.reveal .stamp { opacity: 0; transform: rotate(var(--r)) scale(1.7); }
+.passport.reveal.is-in .stamp {
+  opacity: .9; transform: rotate(var(--r)) scale(1);
+  transition: transform .45s cubic-bezier(.3,1.6,.5,1) calc(var(--i) * 110ms + 200ms), opacity .2s ease calc(var(--i) * 110ms + 200ms);
+}
+.passport.reveal.is-in .stamp--home { opacity: 1; }
+.passport.reveal.is-in .stamp:hover { transform: rotate(0deg) scale(1.06); transition-delay: 0s; }
 .gallery { columns: 3 260px; column-gap: 18px; }
 .ph { break-inside: avoid; margin: 0 0 18px; position: relative; border-radius: var(--radius); overflow: hidden; background: var(--lavender); transition: opacity .4s, transform .4s var(--ease); }
 .ph.is-hidden { display: none; }
@@ -450,7 +525,8 @@ a.pub__title::after { content: " ↗"; font-family: var(--sans); font-size: 14px
 }
 .lightbox[hidden] { display: none; }
 .lb__figure { margin: 0; display: grid; justify-items: center; gap: 14px; }
-.lb__figure img { max-height: 82vh; max-width: 100%; width: auto; border-radius: 12px; box-shadow: 0 30px 80px rgba(0,0,0,.5); }
+.lb__frame { border-radius: 12px; overflow: hidden; box-shadow: 0 30px 80px rgba(0,0,0,.5); max-width: 100%; }
+.lb__figure img { max-height: 82vh; max-width: 100%; width: auto; }
 .lb__figure figcaption { color: #fff; text-align: center; font-size: 15px; }
 .lb__figure figcaption b { font-family: var(--serif); font-size: 22px; margin-right: 8px; font-weight: 600; }
 .lb__nav, .lb__close {
@@ -519,6 +595,16 @@ a.pub__title::after { content: " ↗"; font-family: var(--sans); font-size: 14px
   .training__list li { grid-template-columns: 1fr; gap: 2px; }
   .tabs { flex-wrap: nowrap; max-width: 100%; overflow-x: auto; scrollbar-width: none; }
   .tabs::-webkit-scrollbar { display: none; }
+  .passport { padding: 22px 16px 26px; }
+  .stamps { gap: 14px 12px; justify-content: center; }
+  .stamp { width: 92px; height: 92px; outline-offset: -7px; }
+  .stamp--oval { width: 112px; height: 84px; }
+  .stamp--rect { width: 100px; height: 80px; }
+  .stamp--home { width: 120px; height: 96px; }
+  .stamp__code { font-size: 26px; }
+  .stamp__name { font-size: 9px; letter-spacing: .1em; }
+  .stamp__note { font-size: 8px; letter-spacing: .14em; }
+  .avatar { margin-left: 12px; }
   .tabs { gap: 2px; padding: 4px; }
   .tab { padding: 8px 11px; font-size: 13px; flex: none; }
   .hero { padding-top: calc(var(--nav-h) + 28px); }

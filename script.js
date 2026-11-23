@@ -135,7 +135,6 @@
     }));
   };
   setupTabs('[data-filter]', 'filter', '.tl', 'type');
-  setupTabs('[data-gfilter]', 'gfilter', '.ph', 'cat');
 
   /* ---------- Training list toggle ---------- */
   const tList = $('#trainingList');
