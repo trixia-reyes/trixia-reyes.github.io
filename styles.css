@@ -388,21 +388,24 @@ a.pub__title::after { content: " ↗"; font-family: var(--sans); font-size: 14px
 .section__head--light .section__title::after { border-color: #fff; border-bottom-color: var(--lilac); }
 .section__head--light .section__intro { color: #ddd0fb; }
 .downloads { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; position: relative; }
-/* Resume avatars: academia = duotone circle with rotating text ring; corporate = full-colour tilted card stack */
+/* Resume avatars: same cut-out photo treatment (lavender backdrop baked in, purple tint on top);
+   academia = circle with rotating text ring, corporate = tilted card stack */
 .avatar { position: relative; width: 150px; height: 150px; flex: none; }
 .avatar--academia .avatar__ring { position: absolute; inset: -14px; width: calc(100% + 28px); height: calc(100% + 28px); animation: spin 26s linear infinite; }
 .avatar__ring text { font: 800 11.5px var(--sans); letter-spacing: .26em; fill: var(--lilac); }
-.avatar--academia .avatar__img { position: absolute; inset: 12px; width: calc(100% - 24px); height: calc(100% - 24px); border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 3px rgba(255,255,255,.9); }
+/* Both photos are the same 132px square, cropped to the same eye line and face size */
+.avatar--academia .avatar__frame { position: absolute; inset: 9px; width: 132px; height: 132px; border-radius: 50%; overflow: hidden; box-shadow: 0 0 0 3px rgba(255,255,255,.9); }
+.avatar--academia .avatar__img { width: 100%; height: 100%; object-fit: cover; }
 .avatar__badge { position: absolute; right: 2px; bottom: 6px; width: 40px; height: 40px; border-radius: 50%; background: #fff; display: grid; place-items: center; box-shadow: 0 6px 16px rgba(0,0,0,.25); }
 .avatar__badge svg { width: 22px; height: 22px; fill: none; stroke: var(--plum); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 @keyframes spin { to { transform: rotate(360deg); } }
-.avatar--corporate .avatar__stack { position: absolute; inset: 10px 0 0 10px; border-radius: 22px; background: linear-gradient(135deg, var(--violet-2), var(--lilac)); transform: rotate(8deg); }
+.avatar--corporate .avatar__stack { position: absolute; inset: 18px 0 0 18px; border-radius: 22px; background: linear-gradient(135deg, var(--violet-2), var(--lilac)); transform: rotate(8deg); }
 .avatar--corporate .avatar__frame {
-  position: absolute; inset: 0 10px 10px 0; border-radius: 22px; overflow: hidden; transform: rotate(-4deg);
+  position: absolute; inset: 0 18px 18px 0; border-radius: 22px; overflow: hidden; transform: rotate(-4deg);
   background: linear-gradient(180deg, #efe7ff, #cdb9f6); box-shadow: 0 0 0 3px #fff, 0 14px 30px rgba(0,0,0,.3);
   transition: transform .4s var(--ease);
 }
-.avatar--corporate .avatar__img { width: 100%; height: 100%; object-fit: cover; mix-blend-mode: multiply; }
+.avatar--corporate .avatar__img { width: 100%; height: 100%; object-fit: cover; }
 .dl:hover .avatar--corporate .avatar__frame { transform: rotate(0deg); }
 .avatar__tag { position: absolute; left: -10px; bottom: 4px; background: #fff; color: var(--plum); font-family: var(--serif); font-weight: 600; font-size: 14px; padding: 4px 10px; border-radius: 8px; box-shadow: 0 6px 16px rgba(0,0,0,.25); transform: rotate(-4deg); }
 .dl__meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
@@ -442,6 +445,16 @@ a.pub__title::after { content: " ↗"; font-family: var(--sans); font-size: 14px
   content: ""; position: absolute; right: -80px; top: -80px; width: 320px; height: 320px; border-radius: 50%; opacity: .5; pointer-events: none;
   background: repeating-radial-gradient(circle, transparent 0 9px, rgba(139,92,246,.12) 9px 10px);
 }
+/* Sun-and-three-stars line art, embossed into the empty corner like a passport cover */
+.passport__emblem {
+  position: absolute; right: -110px; bottom: -150px; width: 520px; height: 520px; pointer-events: none;
+  fill: none; stroke: var(--violet); stroke-width: 1.6; stroke-linejoin: round; opacity: .17;
+  transform: rotate(-8deg);
+}
+.passport__emblem .thin { stroke-width: .8; }
+.passport.reveal .passport__emblem { transition: transform 1.6s var(--ease), opacity 1.6s; opacity: 0; transform: rotate(-30deg) scale(.94); }
+.passport.reveal.is-in .passport__emblem { opacity: .17; transform: rotate(-8deg); }
+.stamps { position: relative; z-index: 1; }
 .passport__head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 24px; margin-bottom: 26px; position: relative; }
 .passport__label { font-size: 12px; font-weight: 800; letter-spacing: .28em; text-transform: uppercase; color: var(--violet); }
 .passport__count { font-family: var(--serif); font-size: 19px; color: var(--ink-soft); }
@@ -490,11 +503,24 @@ a.pub__title::after { content: " ↗"; font-family: var(--sans); font-size: 14px
 .ph:hover figcaption { transform: none; opacity: 1; }
 
 /* ---------- Contact ---------- */
-.contact { padding: clamp(90px, 12vw, 160px) 0; background: var(--white); position: relative; overflow: hidden; border-top: 1px solid var(--line); }
-.contact::after {
-  content: "TAR"; position: absolute; right: -2vw; bottom: -6vw; font-family: var(--serif); font-weight: 700;
-  font-size: 32vw; line-height: 1; color: var(--lavender); z-index: 0; pointer-events: none; letter-spacing: -.04em;
+.contact { padding: clamp(90px, 12vw, 160px) 0 max(clamp(90px, 12vw, 160px), 18.5vw); background: var(--white); position: relative; overflow: hidden; border-top: 1px solid var(--line); }
+/* Watermark: "T" in the weight of "Trixia", "Reyes" in the italic of "Reyes" (same as the hero name).
+   The word sits on the footer's top edge and the tail of the "y" carries on into the footer in a
+   slightly lighter plum: the text is painted with a two-colour gradient that switches exactly at the edge. */
+.contact { overflow-x: clip; overflow-y: visible; }
+.contact__mark {
+  --s: min(21vw, 300px);          /* font size */
+  --drop: calc(var(--s) * .3);    /* how far the box hangs below the section = descender room (less than the footer height) */
+  position: absolute; right: 1.5vw; bottom: calc(var(--drop) * -1); z-index: 1; pointer-events: none;
+  font-family: var(--serif); font-weight: 600; font-size: var(--s); line-height: 1;
+  padding: 0 .06em .18em 0;  /* keeps the italic overhang and the descender inside the painted box */
+  letter-spacing: -.035em; white-space: nowrap; user-select: none;
+  background: linear-gradient(to bottom, var(--lavender) calc(100% - var(--drop)), #563f8c calc(100% - var(--drop)));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
 }
+.footer { position: relative; }
+.footer .container { position: relative; z-index: 2; }
+.contact__mark i { font-style: italic; font-weight: 400; letter-spacing: -.02em; margin-left: .01em; }
 .contact .container { position: relative; z-index: 1; }
 .contact__title { font-family: var(--serif); font-weight: 600; font-size: clamp(52px, 9vw, 120px); line-height: .95; letter-spacing: -.035em; color: var(--plum); margin: 22px 0 26px; }
 .contact__title em { font-weight: 400; color: var(--violet); }
