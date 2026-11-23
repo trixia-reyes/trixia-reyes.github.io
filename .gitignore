@@ -1,0 +1,7 @@
+# Original source material (large photos, LinkedIn export, editable resumes) — not part of the public site
+Contents/
+Resume/
+
+# Local tooling
+.claude/
+.DS_Store
