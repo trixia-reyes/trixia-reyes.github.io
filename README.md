@@ -46,6 +46,18 @@ Both resumes are written for applicant tracking systems (ATS): single column, re
 python3 -c "from pypdf import PdfReader as R; [print(f, len(R(f).pages)) for f in ['assets/docs/Trixia_Reyes_Academic_CV.pdf','assets/docs/Trixia_Reyes_LD_HR_Resume.pdf']]"
 ```
 
+## Link preview image
+
+When the link is shared (WhatsApp, LinkedIn, etc.), apps show `assets/img/og-card.jpg` (1200×630). Its source is `resume-src/og-card.html`. After editing it, start the local server and run:
+
+```bash
+"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --hide-scrollbars --force-device-scale-factor=1 \
+  --window-size=1200,630 --virtual-time-budget=8000 --screenshot=og.png "http://localhost:8765/resume-src/og-card.html"
+python3 -c "from PIL import Image; Image.open('og.png').convert('RGB').save('assets/img/og-card.jpg', quality=86, optimize=True)" && rm og.png
+```
+
+Then bump the `?v=` number on the three `og-card.jpg` URLs in `index.html`, so apps fetch the new image instead of their cached copy.
+
 ## Hosting at trixia-reyes.github.io
 
 The site is served by the repository `trixia-reyes/trixia-reyes.github.io`, owned by the GitHub organization `trixia-reyes` (which `sur-akash` owns). Any push to `main` republishes it within a minute or two.
